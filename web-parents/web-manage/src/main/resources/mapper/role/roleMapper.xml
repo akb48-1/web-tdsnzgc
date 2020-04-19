@@ -4,13 +4,107 @@
 
 <!-- 命名空间为绑定接口的全类名 -->
 <mapper namespace="com.tdsnzgc.manage_web.pojo.role.mapper.RoleMapper">
+    <resultMap id="resultRoleMap" type="com.tdsnzgc.manage_web.pojo.role.Role">
+        <id property="role_id" column="ROLE_ID" jdbcType="BIGINT"/>
+        <result property="role_name" column="ROLE_NAME" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="DATE"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="DATE"/>
+        <result property="updateer_name" column="UPDATE_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
 
-    <select id="queryRoleById" resultType="String" parameterType="list">
+    <select id="queryPermissionIdsByRoleIds" resultType="String" parameterType="list">
         select permission_ids from t_roles
          where
         <foreach collection="list" index="index" item="item" open="(" separator="or" close=")">
             role_id = #{item}
         </foreach>
     </select>
+
+    <select id="queryById" resultMap="resultRoleMap">
+        select * from t_roles
+        where role_id = #{role_id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByPage" resultType="com.tdsnzgc.manage_web.pojo.role.Role" parameterType="Map">
+        select role_id,role_name,status,create_time,createer_name,update_time,updateer_name,
+        case
+            when
+                update_time > create_time
+            then update_time
+            else create_time
+            end sortTime
+        from t_roles
+        <where>
+            <if test="role_id != null and role_id != ''">
+                and ROLE_ID like concat('%',#{role_id,jdbcType=BIGINT},'%')
+            </if >
+            <if test="role_name != null and role_name != ''">
+                and ROLE_NAME like concat('%',#{role_name,jdbcType=VARCHAR},'%')
+            </if >
+            <if test="status != null">
+                and status = ${status}
+            </if >
+        </where>
+        order by sortTime desc
+    </select>
+
+
+    <insert id="insert" parameterType="com.tdsnzgc.manage_web.pojo.role.Role">
+
+        insert into t_roles (ROLE_NAME,`STATUS`,CREATE_TIME,CREATEER_NAME) values
+        (
+            #{role_name,jdbcType=VARCHAR}, 0, now(), #{createer_name,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tdsnzgc.manage_web.pojo.role.Role">
+        update t_roles
+        <set>
+            UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+            UPDATE_TIME = now()
+            <if test="role_name != null ">
+                ,ROLE_NAME = #{role_name,jdbcType=VARCHAR}
+            </if >
+            <if test="status != null ">
+                ,STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </set>
+        where ROLE_ID = #{role_id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from t_roles where role_id = ${role_id, jdbcType=BIGINT}
+    </delete>
+
+    <select id="queryUsingRoleById" resultType="int">
+        select count(0) from t_users where find_in_set(#{role_id, jdbcType=BIGINT},ROLE_IDS)
+    </select>
+
+    <update id="addPermission">
+        update t_roles
+        <set>
+            <if test="permission_id != null and permission_id !=''">
+                UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+                UPDATE_TIME = now()
+                ,PERMISSION_IDS = CONCAT(PERMISSION_IDS, CONCAT(#{permission_id,jdbcType=BIGINT}, ','))
+            </if >
+        </set>
+        where ROLE_ID = #{role_id}
+    </update>
+
+    <update id="removePermission">
+        update t_roles
+        <set>
+
+            <if test="permission_id != null and permission_id !=''">
+                UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+                UPDATE_TIME = now()
+                ,PERMISSION_IDS = REPLACE(PERMISSION_IDS, CONCAT(#{permission_id,jdbcType=BIGINT}, ','), '')
+            </if >
+        </set>
+        where ROLE_ID = #{role_id}
+    </update>
 
 </mapper>

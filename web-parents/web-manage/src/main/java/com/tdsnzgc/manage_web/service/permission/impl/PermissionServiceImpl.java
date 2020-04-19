@@ -1,29 +1,36 @@
-package com.tdsnzgc.manage_web.service.permission;
+package com.tdsnzgc.manage_web.service.permission.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.tdsnzgc.common_web.config.account.pojo.Account;
-import com.tdsnzgc.common_web.config.account.service.AccountService;
+import com.tdsnzgc.common_web.config.account.service.AccountServiceImpl;
+import com.tdsnzgc.common_web.config.resultUtil.Result;
+import com.tdsnzgc.common_web.vo.PageVo;
 import com.tdsnzgc.manage_web.pojo.handle.Handle;
 import com.tdsnzgc.manage_web.pojo.menu.Menu;
 import com.tdsnzgc.manage_web.pojo.permissions.Permission;
 import com.tdsnzgc.manage_web.pojo.permissions.mapper.PermissionMapper;
-import com.tdsnzgc.manage_web.service.role.RoleService;
+import com.tdsnzgc.manage_web.pojo.role.mapper.RoleMapper;
+import com.tdsnzgc.manage_web.service.permission.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.*;
 
 @Component
-public class PermissionServiceImpl{
+@Service
+public class PermissionServiceImpl implements PermissionService {
     @Autowired
     PermissionMapper permissionMapper;
 
     @Autowired
-    AccountService accountService;
+    RoleMapper roleMapper;
 
     @Autowired
-    RoleService roleService;
+    AccountServiceImpl accountServiceImpl;
 
+    @Override
     public List<Menu> queryMyPermissionMenu(String token, String type) {
         List<String> myPermissionIds = new ArrayList();
         // 权限集合
@@ -145,17 +152,17 @@ public class PermissionServiceImpl{
     }
 
 
-
+    @Override
     public List<String> getMyPermissionIds(String token) {
         // 获取用户信息
-        Account account = accountService.getUserInfo(token);
+        Account account = accountServiceImpl.getUserInfo(token);
 
         // 读取 整理 用户角色id
-        String[] role_ids = account.getRoles_id().split(",");
+        String[] role_ids = account.getRole_ids().split(",");
         List<String> role_ids_list = Arrays.asList(role_ids);
 
         // 读取角色权限
-        List<String> rows = roleService.queryRoleById(role_ids_list);
+        List<String> rows = roleMapper.queryPermissionIdsByRoleIds(role_ids_list);
 
         // 整理角色权限
         List<String> permission_ids_list = new ArrayList();
@@ -174,6 +181,20 @@ public class PermissionServiceImpl{
         permission_ids_list = new ArrayList<>(hashSet);
 
         return permission_ids_list;
+    }
+
+    @Override
+    public Map queryUsingPermissionByRoleId(Map map) {
+        PageHelper.startPage((int) map.get("pageNo"), (int) map.get("pageSize"));
+        List<Permission> list = permissionMapper.queryUsingPermissionByRoleId(map);
+        return new PageVo().setPageResult(list);
+    }
+
+    @Override
+    public Map queryUnUsingPermissionByRoleId(Map map) {
+        PageHelper.startPage((int) map.get("pageNo"), (int) map.get("pageSize"));
+        List<Permission> list = permissionMapper.queryUnUsingPermissionByRoleId(map);
+        return new PageVo().setPageResult(list);
     }
 
 }

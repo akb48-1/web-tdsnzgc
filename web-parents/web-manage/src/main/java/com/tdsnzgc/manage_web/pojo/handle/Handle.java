@@ -5,13 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Handle extends BaseEntity {
-    Integer id;
+    BigInteger id;
     String name;
     String value;
-    String index;
-    Integer parent_id;
+    Integer index;
+    Integer type;
+    BigInteger parent_id;
 }

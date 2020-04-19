@@ -1,7 +1,7 @@
 package com.tdsnzgc.manage_web.controller;
 
 import com.tdsnzgc.common_web.config.account.pojo.Account;
-import com.tdsnzgc.common_web.config.account.service.AccountServiceImpl;
+import com.tdsnzgc.common_web.config.account.service.AccountService;
 import com.tdsnzgc.common_web.config.redisConfig.RedisUtil;
 import com.tdsnzgc.common_web.config.resultUtil.Result;
 import com.tdsnzgc.common_web.config.resultUtil.ResultUtil;
@@ -26,7 +26,7 @@ public class Hello {
     RedisUtil redisUtil;
 
     @Autowired
-    AccountServiceImpl acountServiceImpl;
+    AccountService acountService;
 
     @ApiOperation(value="发出笑声", notes="根据url的id来发出笑声")
     @ApiImplicitParams({
@@ -57,7 +57,7 @@ public class Hello {
     @ApiOperation("通过token得到用户信息")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     public Result checkRedis(@RequestHeader(name = "token") String token) {
-        Account account = acountServiceImpl.getUserInfo(token);
+        Account account = acountService.getUserInfo(token);
         return new ResultUtil().setData(account);
     }
 

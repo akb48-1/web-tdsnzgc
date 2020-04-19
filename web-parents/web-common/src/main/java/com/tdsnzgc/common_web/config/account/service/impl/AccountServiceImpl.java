@@ -11,12 +11,13 @@ import com.tdsnzgc.common_web.config.resultUtil.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
-@Component
-public class AccountServiceImpl implements AccountMapper {
+@Service
+public class AccountServiceImpl implements AccountService {
 
     @Value("${tokenExpires}") // token实效时间
     int tokenExpires;
@@ -61,6 +62,7 @@ public class AccountServiceImpl implements AccountMapper {
     /*
     * 通过token 在 redis查用户信息
     * */
+    @Override
     public Account getUserInfo(String token) {
         String accountStr = (String) redisUtil.get(token);
         return JSONUtil.toBean(accountStr, Account.class);

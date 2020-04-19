@@ -1,20 +1,12 @@
 package com.tdsnzgc.common_web.config.account.pojo;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class Account {
     String user_id;
     String username;
     String password;
     String name;
-    String roles_id;
-    String organs_id;
+    String role_ids;
+    String organ_ids;
     Integer status;
 
     public String getUser_id() {
@@ -49,28 +41,28 @@ public class Account {
         this.name = name;
     }
 
-    public String getRoles_id() {
-        return roles_id;
+    public String getRole_ids() {
+        return role_ids;
     }
 
-    public void setRoles_id(String roles_id) {
-        if(roles_id == null || "null".equals(roles_id)) {
-            this.roles_id = "";
+    public void setRole_ids(String role_ids) {
+        if(role_ids == null || "null".equals(role_ids)) {
+            this.role_ids = "";
             return;
         }
-        this.roles_id = roles_id;
+        this.role_ids = role_ids;
     }
 
     public String getOrgans_id() {
-        return organs_id;
+        return organ_ids;
     }
 
     public void setOrgans_id(String organs_id) {
         if(organs_id == null || "null".equals(organs_id)) {
-            this.organs_id = "";
+            this.organ_ids = "";
             return;
         }
-        this.organs_id = organs_id;
+        this.organ_ids = organs_id;
     }
 
     public Integer getStatus() {
@@ -80,4 +72,5 @@ public class Account {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
 }

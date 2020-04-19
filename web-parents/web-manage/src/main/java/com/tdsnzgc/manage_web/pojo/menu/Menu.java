@@ -5,20 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Menu extends BaseEntity {
-    Integer id;
+    BigInteger id;
     String title;
     String route_url;
-    String index;
-    String level;
+    Integer index;
+    Integer level;
+    Integer type;
     String component_path;
-    Integer parent_id;
-    String iCon;
+    BigInteger parent_id;
+    String icon;
     List<Menu> children;
     List<Object> handle_list;
 }

@@ -5,19 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Permission extends BaseEntity {
-    Integer permission_id;
+    BigInteger permission_id;
     String permission_name;
-    String permission_type;
-    String permission_index;
-    String permission_level;
+    Integer permission_type;
+    Integer permission_index;
+    Integer permission_level;
 
     String route_url;
     String component_path;
     String handle_value;
-    Integer parent_menu_id;
-    String iCon;
+    BigInteger parent_menu_id;
+    String icon;
 }

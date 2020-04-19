@@ -13,4 +13,34 @@
         </foreach>
     </select>
 
+    <select id="queryUsingPermissionByRoleId" resultType="com.tdsnzgc.manage_web.pojo.permissions.Permission" parameterType="Map">
+        select * from t_permissions where find_in_set(PERMISSION_ID,#{permission_ids, jdbcType=VARCHAR})
+        <if test="permission_id != null and permission_id != ''">
+            and PERMISSION_ID like concat('%',#{permission_id,jdbcType=BIGINT},'%')
+        </if>
+        <if test="permission_name != null and permission_name != ''">
+            and PERMISSION_NAME like concat('%',#{permission_name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="parent_menu_id != null and parent_menu_id != ''">
+            and PARENT_MENU_ID like concat('%',#{parent_menu_id,jdbcType=BIGINT},'%')
+        </if>
+    </select>
+
+    <select id="queryUnUsingPermissionByRoleId" resultType="com.tdsnzgc.manage_web.pojo.permissions.Permission" >
+        select * from t_permissions where !find_in_set(PERMISSION_ID,#{permission_ids, jdbcType=VARCHAR})
+        <if test="permission_id != null and permission_id != ''">
+            and PERMISSION_ID like concat('%',#{permission_id,jdbcType=BIGINT},'%')
+        </if>
+        <if test="permission_name != null and permission_name != ''">
+            and PERMISSION_NAME like concat('%',#{permission_name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="parent_menu_id != null and parent_menu_id != ''">
+            and PARENT_MENU_ID like concat('%',#{parent_menu_id,jdbcType=BIGINT},'%')
+        </if>
+    </select>
+
+    <select id="queryUsingPermissionById" resultType="int">
+        select count(0) from t_roles where ROLE_ID = #{role_id, jdbcType=BIGINT} and find_in_set(#{permission_id, jdbcType=BIGINT},PERMISSION_IDS)
+    </select>
+
 </mapper>
