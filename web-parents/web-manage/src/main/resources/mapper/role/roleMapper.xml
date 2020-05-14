@@ -7,6 +7,7 @@
     <resultMap id="resultRoleMap" type="com.tdsnzgc.manage_web.pojo.role.Role">
         <id property="role_id" column="ROLE_ID" jdbcType="BIGINT"/>
         <result property="role_name" column="ROLE_NAME" jdbcType="VARCHAR"/>
+
         <result property="status" column="STATUS" jdbcType="INTEGER"/>
         <result property="create_time" column="CREATE_TIME" jdbcType="DATE"/>
         <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
@@ -44,7 +45,7 @@
                 and ROLE_NAME like concat('%',#{role_name,jdbcType=VARCHAR},'%')
             </if >
             <if test="status != null">
-                and status = ${status}
+                and STATUS = #{status,jdbcType=INTEGER}
             </if >
         </where>
         order by sortTime desc
@@ -74,8 +75,8 @@
         where ROLE_ID = #{role_id}
     </update>
 
-    <delete id="delete" parameterType="int">
-        delete from t_roles where role_id = ${role_id, jdbcType=BIGINT}
+    <delete id="delete" >
+        delete from t_roles where role_id = #{goods_id, jdbcType=BIGINT}
     </delete>
 
     <select id="queryUsingRoleById" resultType="int">

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.goods.mapper.GoodsMapper">
+    <resultMap id="resultGoodsMap" type="com.tdsnzgc.manage_web.pojo.goods.Goods">
+        <id property="goods_id" column="GOODS_ID" jdbcType="BIGINT"/>
+        <result property="goods_name" column="GOODS_NAME" jdbcType="VARCHAR"/>
+        <result property="goods_price" column="GOODS_PRICE" jdbcType="DECIMAL"/>
+        <result property="goods_desc" column="GOODS_DESC" jdbcType="VARCHAR"/>
+        <result property="goods_picture" column="GOODS_PICTURE" jdbcType="VARCHAR"/>
+        <result property="classify_ids" column="CLASSIFY_IDS" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="unit_id" column="UNIT_ID" jdbcType="BIGINT"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <select id="queryById" resultMap="resultGoodsMap">
+        select * from t_goods_config
+        where GOODS_ID = #{goods_id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByPage" resultMap="resultGoodsMap" parameterType="Map">
+        select goods_id,goods_name,goods_price,goods_desc,goods_picture,classify_ids,organ_id,unit_id,status,create_time,createer_name,update_time,updateer_name
+        ,
+        case
+            when
+                update_time > create_time
+            then update_time
+            else create_time
+            end sortTime
+        from t_goods_config
+        <where>
+            <if test="goods_id != null and goods_id != ''">
+                and GOODS_ID like concat('%',#{goods_id,jdbcType=BIGINT},'%')
+            </if>
+            <if test="goods_name != null and goods_name != ''">
+                and GOODS_NAME like concat('%',#{goods_name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="organ_id != null and organ_id != ''">
+                and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+            </if>
+            <if test="status != null and status != ''">
+                and STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by sortTime desc
+    </select>
+
+
+    <insert id="insert" parameterType="com.tdsnzgc.manage_web.pojo.goods.Goods">
+
+        insert into t_goods_config (GOODS_NAME,GOODS_PRICE,GOODS_DESC,GOODS_PICTURE,CLASSIFY_IDS,ORGAN_ID,UNIT_ID,STATUS,CREATE_TIME,CREATEER_NAME) values
+        (
+            #{goods_name,jdbcType=VARCHAR},
+            #{goods_price,jdbcType=DECIMAL},
+            #{goods_desc,jdbcType=VARCHAR},
+            #{goods_picture,jdbcType=VARCHAR},
+            #{classify_ids,jdbcType=VARCHAR},
+            #{organ_id,jdbcType=BIGINT},
+            #{unit_id,jdbcType=BIGINT},
+            0, now(), #{createer_name,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tdsnzgc.manage_web.pojo.goods.Goods">
+        update t_goods_config
+        <set>
+            UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+            UPDATE_TIME = now()
+            <if test="goods_name != null ">
+                ,GOODS_NAME = #{goods_name,jdbcType=VARCHAR}
+            </if >
+            <if test="goods_price != null ">
+                ,GOODS_PRICE = #{goods_price,jdbcType=DECIMAL}
+            </if >
+            <if test="goods_desc != null ">
+                ,GOODS_DESC = #{goods_desc,jdbcType=VARCHAR}
+            </if >
+            <if test="goods_picture != null ">
+                ,GOODS_PICTURE = #{goods_picture,jdbcType=VARCHAR}
+            </if >
+            <if test="classify_ids != null ">
+                ,CLASSIFY_IDS = #{classify_ids,jdbcType=VARCHAR}
+            </if >
+            <if test="organ_id != null ">
+                ,ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+            </if >
+            <if test="unit_id != null ">
+                ,UNIT_ID = #{unit_id,jdbcType=BIGINT}
+            </if >
+            <if test="status != null ">
+                ,STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </set>
+        where GOODS_ID = #{goods_id}
+    </update>
+
+
+
+</mapper>

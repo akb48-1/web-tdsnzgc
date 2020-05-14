@@ -1,13 +1,16 @@
 package com.tdsnzgc.manage_web.pojo.organ;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tdsnzgc.manage_web.pojo.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +37,10 @@ public class Organ extends BaseEntity {
     private String organ_desc;
 
     @ApiModelProperty("创办时间")
-    private String organ_create_time;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date organ_create_time;
 
+    @ApiModelProperty("状态 0: 正常运营 1:暂停运营")
+    private int status;
 }

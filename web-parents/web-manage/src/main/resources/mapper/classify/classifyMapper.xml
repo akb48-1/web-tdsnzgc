@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.classify.mapper.ClassifyMapper">
+    <resultMap id="resultClassifyMap" type="com.tdsnzgc.manage_web.pojo.classify.Classify">
+        <id property="classify_id" column="CLASSIFY_ID" jdbcType="BIGINT"/>
+        <result property="classify_name" column="CLASSIFY_NAME" jdbcType="VARCHAR"/>
+        <result property="parent_classify_id" column="PARENT_CLASSIFY_ID" jdbcType="BIGINT"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultClassifyMap">
+        select * from t_classifys
+    </select>
+
+    <select id="queryById" resultMap="resultClassifyMap">
+        select * from t_classifys
+        where CLASSIFY_ID = #{classify_id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByPage" resultMap="resultClassifyMap" parameterType="Map">
+        select classify_id,classify_name,parent_classify_id,status,create_time,createer_name,update_time,updateer_name
+        ,
+        case
+            when
+                update_time > create_time
+            then update_time
+            else create_time
+            end sortTime
+        from t_classifys
+        <where>
+            <if test="classify_id != null and classify_id != ''">
+                and CLASSIFY_ID like concat('%',#{classify_id,jdbcType=BIGINT},'%')
+            </if >
+            <if test="classify_name != null and classify_name != ''">
+                and CLASSIFY_NAME like concat('%',#{classify_name,jdbcType=VARCHAR},'%')
+            </if >
+            <if test="parent_classify_id != null and parent_classify_id != ''">
+                and PARENT_CLASSIFY_ID like concat('%',#{parent_classify_id,jdbcType=BIGINT},'%')
+            </if >
+            <if test="status != null">
+                and STATUS = #{status,jdbcType=INTEGER}
+            </if >
+        </where>
+        order by sortTime desc
+    </select>
+
+
+    <insert id="insert" parameterType="com.tdsnzgc.manage_web.pojo.classify.Classify">
+        insert into t_classifys (CLASSIFY_NAME,PARENT_CLASSIFY_ID,ORGAN_ID,STATUS,CREATE_TIME,CREATEER_NAME) values
+        (
+            #{classify_name,jdbcType=VARCHAR},
+            #{parent_classify_id,jdbcType=BIGINT},
+            #{organ_id,jdbcType=BIGINT},
+            0, now(), #{createer_name,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tdsnzgc.manage_web.pojo.classify.Classify">
+        update t_classifys
+        <set>
+            UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+            UPDATE_TIME = now()
+            <if test="classify_name != null ">
+                ,CLASSIFY_NAME = #{classify_name,jdbcType=VARCHAR}
+            </if >
+            <if test="parent_classify_id != null ">
+                ,PARENT_CLASSIFY_ID = #{parent_classify_id,jdbcType=BIGINT}
+            </if >
+            <if test="organ_id != null ">
+                ,ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+            </if >
+            <if test="status != null ">
+                ,STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where CLASSIFY_ID = #{classify_id}
+    </update>
+
+
+
+</mapper>

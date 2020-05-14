@@ -40,7 +40,7 @@ public class OrganServiceImpl implements OrganService {
 
     @Override
     public int update(Organ organ) {
-        return 0;
+        return organMapper.update(organ);
     }
 
 

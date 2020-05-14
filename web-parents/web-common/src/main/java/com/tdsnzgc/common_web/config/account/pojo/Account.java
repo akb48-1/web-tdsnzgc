@@ -53,16 +53,16 @@ public class Account {
         this.role_ids = role_ids;
     }
 
-    public String getOrgans_id() {
+    public String getOrgan_ids() {
         return organ_ids;
     }
 
-    public void setOrgans_id(String organs_id) {
-        if(organs_id == null || "null".equals(organs_id)) {
-            this.organ_ids = "";
-            return;
-        }
-        this.organ_ids = organs_id;
+    public void setOrgan_ids(String organ_ids) {
+//        if(organ_ids == null || "null".equals(organ_ids)) {
+//            this.organ_ids = "";
+//            return;
+//        }
+        this.organ_ids = organ_ids;
     }
 
     public Integer getStatus() {

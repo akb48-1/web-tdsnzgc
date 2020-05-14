@@ -37,7 +37,7 @@ public class PermissionServiceImpl implements PermissionService {
         List<Permission> permissionList = new ArrayList();
 
         if(token != null) {
-            myPermissionIds = getMyPermissionIds(token);
+            myPermissionIds = this.getMyPermissionIds(token);
             // 用户可用权限集合
             permissionList = permissionMapper.queryMyPermission(myPermissionIds);
         } else {

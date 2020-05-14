@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.unit.mapper.UnitMapper">
+    <resultMap id="resultUnitMap" type="com.tdsnzgc.manage_web.pojo.unit.Unit">
+        <id property="unit_id" column="UNIT_ID" jdbcType="BIGINT"/>
+        <result property="unit_name" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="unit_key" column="UNIT_KEY" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultUnitMap" parameterType="Map">
+        select unit_id,unit_name,unit_key from t_units
+    </select>
+
+    <select id="queryByPage" resultMap="resultUnitMap" parameterType="Map">
+        select unit_id,unit_name,unit_key
+        from t_units
+        <where>
+            <if test="unit_id != null and unit_id != ''">
+                and UNIT_ID like concat('%',#{unit_id,jdbcType=BIGINT},'%')
+            </if >
+            <if test="unit_name != null and unit_name != ''">
+                and UNIT_NAME like concat('%',#{unit_name,jdbcType=VARCHAR},'%')
+            </if >
+            <if test="unit_key != null and unit_key != ''">
+                and UNIT_KEY like concat('%',#{unit_key,jdbcType=VARCHAR},'%')
+            </if >
+        </where>
+    </select>
+
+
+    <insert id="insert" parameterType="com.tdsnzgc.manage_web.pojo.unit.Unit">
+
+        insert into t_units (UNIT_NAME,UNIT_KEY) values
+        (
+            #{unit_name,jdbcType=VARCHAR}, #{unit_key,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+
+
+
+
+</mapper>
