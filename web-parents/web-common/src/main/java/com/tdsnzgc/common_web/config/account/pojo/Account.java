@@ -1,5 +1,7 @@
 package com.tdsnzgc.common_web.config.account.pojo;
 
+import java.math.BigInteger;
+
 public class Account {
     String user_id;
     String username;

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.order.mapper.OrderMapper">
+    <resultMap id="resultOrderMap" type="com.tdsnzgc.manage_web.pojo.order.Order">
+        <id property="order_id" column="ORDER_ID" jdbcType="BIGINT"/>
+        <result property="order_price" column="ORDER_PRICE" jdbcType="DECIMAL"/>
+        <result property="real_price" column="REAL_PRICE" jdbcType="DECIMAL"/>
+        <result property="payment_price" column="PAYMENT_PRICE" jdbcType="DECIMAL"/>
+        <result property="payment_type" column="PAYMENT_TYPE" jdbcType="INTEGER"/>
+        <result property="payment_status" column="PAYMENT_STATUS" jdbcType="INTEGER"/>
+        <result property="order_desc" column="ORDER_DESC" jdbcType="VARCHAR"/>
+        <result property="order_goods_unique_ids" column="ORDER_GOODS_UNIQUE_IDS" jdbcType="VARCHAR"/>
+        <result property="order_material_unique_ids" column="ORDER_MATERIAL_UNIQUE_IDS" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="seller_id" column="SELLER_ID" jdbcType="BIGINT"/>
+        <result property="seller_name" column="SELLER_NAME" jdbcType="VARCHAR"/>
+
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="shipping_methods" column="SHIPPING_METHODS" jdbcType="INTEGER"/>
+        <result property="carriage" column="CARRIAGE" jdbcType="DECIMAL"/>
+        <result property="chauffeur_id" column="CHAUFFEUR_ID" jdbcType="BIGINT"/>
+        <result property="chauffeur_name" column="CHAUFFEUR_NAME" jdbcType="VARCHAR"/>
+        <result property="car_type" column="CAR_TYPE" jdbcType="VARCHAR"/>
+        <result property="car_type_name" column="CAR_TYPE_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryById" resultMap="resultOrderMap">
+        select * from t_orders
+        where ORDER_ID = #{id,jdbcType=BIGINT} and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByPage" resultMap="resultOrderMap" parameterType="Map">
+        select *,
+        case
+            when
+                update_time > create_time
+            then update_time
+            else create_time
+            end sortTime
+        from t_orders
+        <where>
+            ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+        </where>
+        order by sortTime desc
+    </select>
+
+
+    <insert id="insert" parameterType="Map">
+
+        insert into t_orders (
+        ORDER_PRICE,
+        REAL_PRICE,
+        PAYMENT_PRICE,
+        PAYMENT_TYPE,
+        PAYMENT_STATUS,
+        ORDER_DESC,
+        ORDER_GOODS_UNIQUE_IDS,
+        ORDER_MATERIAL_UNIQUE_IDS,
+        ORGAN_ID,
+        SELLER_ID,
+        SELLER_NAME,
+        CREATE_TIME,
+        CREATEER_NAME,
+        UPDATE_TIME,
+        UPDATEER_NAME,
+        SHIPPING_METHODS,
+        CARRIAGE,
+        CHAUFFEUR_ID,
+        CHAUFFEUR_NAME,
+        CAR_TYPE,
+        CAR_TYPE_NAME
+        ) values
+        (
+            #{order_price,jdbcType=DECIMAL},
+            #{real_price,jdbcType=DECIMAL},
+            #{payment_price,jdbcType=DECIMAL},
+            #{payment_type,jdbcType=INTEGER},
+            #{payment_status,jdbcType=INTEGER},
+            #{order_desc,jdbcType=VARCHAR},
+            #{order_goods_unique_ids,jdbcType=VARCHAR},
+            #{order_material_unique_ids,jdbcType=VARCHAR},
+            #{organ_id,jdbcType=BIGINT},
+            #{seller_id,jdbcType=BIGINT},
+            #{seller_name,jdbcType=VARCHAR},
+            #{create_time,jdbcType=TIMESTAMP},
+            #{createer_name,jdbcType=VARCHAR},
+            null,
+            null,
+            #{shipping_methods,jdbcType=INTEGER},
+            #{carriage,jdbcType=DECIMAL},
+            #{chauffeur_id,jdbcType=BIGINT},
+            #{chauffeur_name,jdbcType=VARCHAR},
+            #{car_type,jdbcType=BIGINT},
+            #{car_type_name,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="Map">
+        update t_orders
+        <set>
+            UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+            UPDATE_TIME = now()
+        </set>
+        where ORDER_ID = #{order_id} and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+    </update>
+
+
+
+</mapper>

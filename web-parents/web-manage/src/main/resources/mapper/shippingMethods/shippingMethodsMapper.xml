@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.shippingMethods.mapper.ShippingMethodsMapper">
+    <resultMap id="resultShippingMethodsMap" type="com.tdsnzgc.manage_web.pojo.shippingMethods.ShippingMethods">
+        <id property="shipping_methods_id" column="SHIPPING_METHODS_ID" jdbcType="BIGINT"/>
+        <result property="shipping_methods_name" column="SHIPPING_METHODS_NAME" jdbcType="VARCHAR"/>
+        <result property="shipping_methods_value" column="SHIPPING_METHODS_VALUE" jdbcType="VARCHAR"/>
+        <result property="shipping_methods_key" column="SHIPPING_METHODS_KEY" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultShippingMethodsMap">
+        select * from t_shipping_methods
+    </select>
+
+</mapper>

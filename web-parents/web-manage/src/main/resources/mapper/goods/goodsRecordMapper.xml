@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.goods.mapper.GoodsRecordMapper">
+    <resultMap id="resultGoodsRecordMap" type="com.tdsnzgc.manage_web.pojo.goods.GoodsRecord">
+        <id property="goods_unique_id" column="GOODS_UNIQUE_ID" jdbcType="BIGINT"/>
+        <result property="goods_id" column="GOODS_ID" jdbcType="BIGINT"/>
+        <result property="goods_name" column="GOODS_NAME" jdbcType="VARCHAR"/>
+        <result property="goods_price" column="GOODS_PRICE" jdbcType="DECIMAL"/>
+        <result property="goods_total_price" column="GOODS_TOTAL_PRICE" jdbcType="DECIMAL"/>
+        <result property="goods_desc" column="GOODS_DESC" jdbcType="VARCHAR"/>
+        <result property="type" column="TYPE" jdbcType="INTEGER"/>
+        <result property="amount" column="AMOUNT" jdbcType="INTEGER"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="unit_id" column="UNIT_ID" jdbcType="BIGINT"/>
+        <result property="unit_name" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- 商品购买记录   -->
+    <insert id="genBuyRecord" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="GOODS_UNIQUE_ID" keyProperty="goods_unique_id">
+        insert into t_goods_record values
+        <foreach collection="list" item="item"  separator="," close=";">
+            (
+            #{item.goods_unique_id,jdbcType=BIGINT},
+            #{item.goods_id,jdbcType=BIGINT},
+            #{item.goods_name,jdbcType=VARCHAR},
+            #{item.goods_desc,jdbcType=VARCHAR},
+            #{item.goods_price,jdbcType=DECIMAL},
+            #{item.goods_total_price,jdbcType=DECIMAL},
+            #{item.create_time,jdbcType=TIMESTAMP},
+            #{item.createer_name,jdbcType=VARCHAR},
+            null,
+            null,
+            #{item.type,jdbcType=INTEGER},
+            #{item.amount,jdbcType=INTEGER},
+            #{item.unit_name,jdbcType=VARCHAR},
+            #{item.unit_id,jdbcType=BIGINT},
+            #{item.organ_id,jdbcType=BIGINT})
+        </foreach>
+    </insert>
+
+    <!-- 通过unique_id 查商品记录 -->
+    <select id="queryByUniqueId" resultMap="resultGoodsRecordMap">
+        select * from t_goods_record
+        <where>
+            ORGAN_ID = #{organ_id,jdbcType=BIGINT} and
+        <foreach collection="goods_unique_ids.split(',')" index="index" item="id" open="(" separator="or" close=")">
+            GOODS_UNIQUE_ID = #{id,jdbcType=VARCHAR}
+        </foreach>
+        </where>
+    </select>
+
+</mapper>

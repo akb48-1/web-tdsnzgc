@@ -37,8 +37,8 @@ public class OrganController {
     @PostMapping("/queryMyOrgan")
     public Result queryMyOrgan(@RequestHeader(name ="token") String token) {
         Account userInfo = accountService.getUserInfo(token);
-        String[] organ_ids = userInfo.getOrgan_ids().split(",");
-        Organ organ = organService.queryById(new BigInteger(organ_ids[0]));
+        String organ_ids = userInfo.getOrgan_ids();
+        Organ organ = organService.queryById(new BigInteger(organ_ids));
 
         if(organ != null) {
             return new ResultUtil().setData(organ);

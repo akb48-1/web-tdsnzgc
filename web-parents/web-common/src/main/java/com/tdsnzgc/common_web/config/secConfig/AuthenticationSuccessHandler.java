@@ -3,7 +3,7 @@ package com.tdsnzgc.common_web.config.secConfig;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.tdsnzgc.common_web.config.account.pojo.Account;
-import com.tdsnzgc.common_web.config.account.service.AccountServiceImpl;
+import com.tdsnzgc.common_web.config.account.service.impl.AccountServiceImpl;
 import com.tdsnzgc.common_web.config.redisConfig.RedisUtil;
 import com.tdsnzgc.common_web.config.responseUtil.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.Map;
 @Component
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     @Autowired
-    AccountServiceImpl acountServiceImpl;
+    AccountServiceImpl accountService;
 
     @Autowired
     RedisUtil redisUtil;
@@ -34,13 +34,16 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     @Value("${tokenExpires}") // token实效时间
     int tokenExpires;
 
+    final String _token = "_token";
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String token = acountServiceImpl.genToken(username, password);
+        String token = accountService.genToken(username, password);
 
-        Account account = acountServiceImpl.selectAccount(username);
+        Account account = accountService.selectAccount(username);
         Map<String, Object> accountMap = BeanUtil.beanToMap(account);
         accountMap.remove("password");
 
@@ -48,6 +51,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         userInfo.put("username", username);
         userInfo.put("token", token);
         redisUtil.set(token, JSONUtil.toJsonStr(accountMap), tokenExpires);
+        redisUtil.set(username + this._token, token, tokenExpires);
 
         ResponseUtil.write(response, 200, true, "登陆成功", userInfo);
     }

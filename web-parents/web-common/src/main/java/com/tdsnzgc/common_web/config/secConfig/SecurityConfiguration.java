@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         //放行swagger
         web.ignoring().antMatchers(HttpMethod.GET,
+                "/file/**", // 上传文件
                 "/v2/api-docs",
                 "/swagger-resources",
                 "/swagger-resources/**",

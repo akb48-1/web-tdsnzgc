@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.seller.mapper.SellerMapper">
+    <resultMap id="resultSellerMap" type="com.tdsnzgc.manage_web.pojo.seller.Seller">
+        <id property="seller_id" column="SELLER_ID" jdbcType="BIGINT"/>
+        <result property="seller_name" column="SELLER_NAME" jdbcType="VARCHAR"/>
+        <result property="nick_name" column="NICK_NAME" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultSellerMap" parameterType="Map">
+        select seller_id,seller_name,nick_name,organ_id,create_time,createer_name,update_time,updateer_name
+        ,
+        case
+            when
+                update_time > create_time
+            then update_time
+            else create_time
+            end sortTime
+        from t_seller
+        where ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+        order by sortTime desc
+    </select>
+
+
+</mapper>

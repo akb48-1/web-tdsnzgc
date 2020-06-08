@@ -1,5 +1,6 @@
 package com.tdsnzgc.manage_web.controller.goods;
 
+import com.tdsnzgc.common_web.config.account.service.impl.AccountServiceImpl;
 import com.tdsnzgc.common_web.config.resultUtil.Result;
 import com.tdsnzgc.common_web.config.resultUtil.ResultUtil;
 import com.tdsnzgc.common_web.vo.PageVo;
@@ -22,7 +23,10 @@ public class GoodsController {
     @Autowired
     GoodsService goodsService;
 
-    @ApiOperation("商品列表翻页")
+    @Autowired
+    AccountServiceImpl accountServiceImpl;
+
+    @ApiOperation("商品详情")
     @PostMapping("/queryById/{id}")
     public Result queryByPage(@PathVariable(name ="id") BigInteger good_id) {
         Goods good = goodsService.queryById(good_id);
@@ -36,11 +40,10 @@ public class GoodsController {
         return new ResultUtil().setData(data);
     }
 
-    @ApiOperation("商品分类")
+    @ApiOperation("新增商品")
     @PostMapping("/addGoods")
     public Result addGoods(@RequestBody Goods goods) {
         goods.setCreateer_name();
-        goods.setOrgan_id(new BigInteger("101"));
         int row = goodsService.insert(goods);
 
         if(row == 1) {

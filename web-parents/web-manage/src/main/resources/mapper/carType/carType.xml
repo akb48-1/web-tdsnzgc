@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.carType.mapper.CarTypeMapper">
+    <resultMap id="resultCarTypeMap" type="com.tdsnzgc.manage_web.pojo.carType.CarType">
+        <id property="car_type_id" column="CAR_TYPE_ID" jdbcType="BIGINT"/>
+        <result property="car_type_name" column="CAR_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="car_type_key" column="CAR_TYPE_KEY" jdbcType="VARCHAR"/>
+        <result property="car_type_value" column="CAR_TYPE_VALUE" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultCarTypeMap">
+        select * from t_cars_type
+    </select>
+
+</mapper>

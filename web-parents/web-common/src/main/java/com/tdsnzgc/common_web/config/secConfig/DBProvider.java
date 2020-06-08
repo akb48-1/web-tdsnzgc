@@ -23,7 +23,6 @@ public class DBProvider implements AuthenticationProvider {
         String accountName = authentication.getName();
         String accountPass = (String) authentication.getCredentials(); // 凭证
 
-//        System.out.println("accountName:" + accountName + "; accountPass:" + accountPass);
         Account account = accountMapper.selectAccount(accountName);
 
         if(account != null) {

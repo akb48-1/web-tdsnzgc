@@ -1,5 +1,6 @@
 package com.tdsnzgc.manage_web.controller.classify;
 
+import com.tdsnzgc.common_web.config.account.service.impl.AccountServiceImpl;
 import com.tdsnzgc.common_web.config.resultUtil.Result;
 import com.tdsnzgc.common_web.config.resultUtil.ResultUtil;
 import com.tdsnzgc.common_web.vo.PageVo;
@@ -25,6 +26,9 @@ public class ClassifyController {
     @Autowired
     ClassifyService classifyService;
 
+    @Autowired
+    AccountServiceImpl accountServiceImpl;
+
     @ApiOperation("所有单分类")
     @PostMapping("/queryAll")
     public Result queryAll() {
@@ -43,7 +47,7 @@ public class ClassifyController {
     @PostMapping("/addClassify")
     public Result addRole(@RequestBody Classify classify) {
         classify.setCreateer_name();
-//        classify.setOrgan_id(new BigInteger("101"));
+        classify.setOrgan_id(new BigInteger(accountServiceImpl.getOrgan_ids()));
         int row = classifyService.insert(classify);
 
         if(row == 1) {

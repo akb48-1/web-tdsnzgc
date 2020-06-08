@@ -2,8 +2,7 @@ package com.tdsnzgc.manage_web.service.permission.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.tdsnzgc.common_web.config.account.pojo.Account;
-import com.tdsnzgc.common_web.config.account.service.AccountServiceImpl;
-import com.tdsnzgc.common_web.config.resultUtil.Result;
+import com.tdsnzgc.common_web.config.account.service.impl.AccountServiceImpl;
 import com.tdsnzgc.common_web.vo.PageVo;
 import com.tdsnzgc.manage_web.pojo.handle.Handle;
 import com.tdsnzgc.manage_web.pojo.menu.Menu;

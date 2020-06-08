@@ -38,7 +38,7 @@
         from t_organs
         <where>
             <if test="organ_id != null and organ_id != ''">
-                and ORGAN_ID like concat('%',#{organ_id,jdbcType=BIGINT},'%')
+                and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
             </if >
             <if test="organ_name != null and organ_name != ''">
                 and ORGAN_NAME like concat('%',#{organ_name,jdbcType=VARCHAR},'%')

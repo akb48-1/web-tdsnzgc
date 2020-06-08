@@ -1,6 +1,5 @@
 package com.tdsnzgc.manage_web.controller.role;
 
-import com.tdsnzgc.common_web.config.account.service.AccountService;
 import com.tdsnzgc.common_web.config.resultUtil.Result;
 import com.tdsnzgc.common_web.config.resultUtil.ResultUtil;
 import com.tdsnzgc.common_web.vo.PageVo;
@@ -22,9 +21,6 @@ public class RoleController {
 
     @Autowired
     RoleService roleService;
-
-    @Autowired
-    AccountService accountService;
 
     @Autowired
     PermissionMapper permissionMapper;

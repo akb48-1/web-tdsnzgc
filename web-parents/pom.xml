@@ -159,10 +159,11 @@
 
             <!-- fastjson -->
             <dependency>
-                <groupId>com.alibaba</groupId>
+                <groupId>com.alibaba</groupId>t
                 <artifactId>fastjson</artifactId>
                 <version>1.2.62</version>
             </dependency>
+
 
         </dependencies>
     </dependencyManagement>
@@ -192,6 +193,7 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+
     </repositories>
 
     <!--Maven远程插件库设置 非必要，可以删除-->
@@ -208,4 +210,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
 </project>

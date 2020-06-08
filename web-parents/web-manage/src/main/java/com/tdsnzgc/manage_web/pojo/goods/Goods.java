@@ -13,12 +13,12 @@ import java.math.BigInteger;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Classify",description = "商品信息")
+@ApiModel(value = "Goods",description = "商品信息")
 public class Goods extends BaseEntity {
-    @ApiModelProperty(value = "分类id")
+    @ApiModelProperty(value = "商品id")
     private BigInteger goods_id;
 
-    @ApiModelProperty("分类名称")
+    @ApiModelProperty("商品名称")
     private String goods_name;
 
     @ApiModelProperty("商品价格")
@@ -30,7 +30,7 @@ public class Goods extends BaseEntity {
     @ApiModelProperty("商品缩略图")
     private String goods_picture;
 
-    @ApiModelProperty("商品缩略图")
+    @ApiModelProperty("商品分类ID")
     private String classify_ids;
 
     @ApiModelProperty("机构id")

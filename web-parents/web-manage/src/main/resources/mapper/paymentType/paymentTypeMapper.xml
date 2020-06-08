@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.paymentType.mapper.PaymentTypeMapper">
+    <resultMap id="resultPaymentTypeMap" type="com.tdsnzgc.manage_web.pojo.paymentType.PaymentType">
+        <id property="payment_type_id" column="PAYMENT_TYPE_ID" jdbcType="BIGINT"/>
+        <result property="payment_type_name" column="PAYMENT_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="payment_type_value" column="PAYMENT_TYPE_VALUE" jdbcType="VARCHAR"/>
+        <result property="payment_type_key" column="PAYMENT_TYPE_KEY" jdbcType="VARCHAR"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="resultPaymentTypeMap">
+        select * from t_payments_type
+    </select>
+
+</mapper>

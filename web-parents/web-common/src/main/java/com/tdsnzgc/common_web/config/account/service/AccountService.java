@@ -7,4 +7,5 @@ public interface AccountService {
     public Account getUserInfo(String token);
     public Account selectAccount(String username);
     public String genToken(String username, String password);
+    public String getToken(String username);
 }
