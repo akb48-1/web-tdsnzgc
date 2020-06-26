@@ -6,8 +6,10 @@ import com.tdsnzgc.manage_web.pojo.goods.Goods;
 import com.tdsnzgc.manage_web.pojo.order.Order;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 public interface OrderService extends BaseService<Order> {
-    Result addOrder(Map map) throws ParseException;
+    Result addOrder(Map map);
+    Map queryReport(Map map);
 }

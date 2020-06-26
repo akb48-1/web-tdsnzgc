@@ -25,7 +25,7 @@ public class FileController {
     @Autowired
     private Environment environment;
 
-    static final String[] types = {"organ", "goods", "user"}; // 图片所属模块类型
+    static final String[] types = {"organ", "goods", "user", "banner"}; // 图片所属模块类型
 
     @PostMapping(value = "/uploadImg")
     public Result upload(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "type") String fileType) {

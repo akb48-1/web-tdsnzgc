@@ -1,6 +1,5 @@
 package com.tdsnzgc.manage_web.service.order.impl;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -49,6 +46,8 @@ public class OrderServiceImpl implements OrderService {
         order.setGoodsRecords(goodsRecords);
         return order;
     }
+
+
 
     @Override
     public Map<String, Object> queryByPage(Map map) {
@@ -92,8 +91,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<GoodsRecord> list = new ArrayList<>();
-        String create_time = map.get("create_time").toString();
-        Date parseDate = DateUtil.parseDate(create_time);
+        String order_time = map.get("order_time").toString();
+        Date parseDate = DateUtil.parseDate(order_time);
 
         for (Object goods : goodsList) {
             JSONObject jsonObject = JSONUtil.parseObj(goods);
@@ -120,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
             g.setUnit_name(unit_name);
             g.setOrgan_id(organ_id);
             g.setAmount(amount);
-            g.setCreate_time(parseDate);
+            g.setOrder_time(parseDate);
 
             list.add(g);
         }
@@ -147,5 +146,33 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
+    }
+
+    @Override
+    public Map queryReport(Map map) {
+
+        map.put("organ_id", accountServiceImpl.getOrgan_ids());
+        List<Order> allOrderList = orderMapper.queryReport(map); // 查所有
+
+        PageHelper.startPage((int) map.get("pageNo"), (int) map.get("pageSize"));
+        List<Order> pageOrderList = orderMapper.queryReport(map); // 查分页
+
+        BigDecimal total_order_price = new BigDecimal("0.00");
+        BigDecimal total_real_price = new BigDecimal("0.00");
+        BigDecimal total_payment_price = new BigDecimal("0.00");
+        for (Order order : allOrderList) {
+            total_order_price = total_order_price.add(order.getOrder_price());
+            total_real_price = total_real_price.add(order.getReal_price());
+            total_payment_price = total_payment_price.add(order.getPayment_price());
+        }
+        Map<String, Object> totalMap = new HashMap();
+        totalMap.put("total_order_price", total_order_price);
+        totalMap.put("total_real_price", total_real_price);
+        totalMap.put("total_payment_price", total_payment_price);
+        totalMap.put("total", allOrderList.size());
+
+        Map pageResult = new PageVo().setPageResult(pageOrderList);
+        pageResult.put("totalInfo", totalMap);
+        return pageResult;
     }
 }

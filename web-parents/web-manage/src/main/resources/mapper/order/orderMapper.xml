@@ -28,6 +28,7 @@
         <result property="chauffeur_name" column="CHAUFFEUR_NAME" jdbcType="VARCHAR"/>
         <result property="car_type" column="CAR_TYPE" jdbcType="VARCHAR"/>
         <result property="car_type_name" column="CAR_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="order_time" column="ORDER_TIME" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <select id="queryById" resultMap="resultOrderMap">
@@ -74,7 +75,8 @@
         CHAUFFEUR_ID,
         CHAUFFEUR_NAME,
         CAR_TYPE,
-        CAR_TYPE_NAME
+        CAR_TYPE_NAME,
+        ORDER_TIME
         ) values
         (
             #{order_price,jdbcType=DECIMAL},
@@ -88,7 +90,7 @@
             #{organ_id,jdbcType=BIGINT},
             #{seller_id,jdbcType=BIGINT},
             #{seller_name,jdbcType=VARCHAR},
-            #{create_time,jdbcType=TIMESTAMP},
+            now(),
             #{createer_name,jdbcType=VARCHAR},
             null,
             null,
@@ -97,7 +99,8 @@
             #{chauffeur_id,jdbcType=BIGINT},
             #{chauffeur_name,jdbcType=VARCHAR},
             #{car_type,jdbcType=BIGINT},
-            #{car_type_name,jdbcType=VARCHAR}
+            #{car_type_name,jdbcType=VARCHAR},
+            #{order_time,jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -109,6 +112,68 @@
         </set>
         where ORDER_ID = #{order_id} and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
     </update>
+
+    <select id="queryReport" resultMap="resultOrderMap" parameterType="Map">
+        select
+        ORDER_ID,
+        ORDER_PRICE,
+        REAL_PRICE,
+        PAYMENT_PRICE,
+        PAYMENT_TYPE,
+        PAYMENT_STATUS,
+        ORDER_DESC,
+        ORDER_GOODS_UNIQUE_IDS,
+        ORDER_MATERIAL_UNIQUE_IDS,
+        ORGAN_ID,
+        SELLER_ID,
+        SELLER_NAME,
+        CREATE_TIME,
+        CREATEER_NAME,
+        UPDATE_TIME,
+        UPDATEER_NAME,
+        SHIPPING_METHODS,
+        CARRIAGE,
+        CHAUFFEUR_ID,
+        CHAUFFEUR_NAME,
+        CAR_TYPE,
+        CAR_TYPE_NAME,
+        ORDER_TIME
+        from t_orders
+        <where>
+            <if test="payment_type != null and payment_type != ''">
+                and PAYMENT_TYPE = #{payment_type,jdbcType=INTEGER}
+            </if>
+            <if test="payment_status != null and payment_status != ''">
+                and PAYMENT_STATUS = #{payment_status,jdbcType=INTEGER}
+            </if>
+            <if test="shipping_methods != null and shipping_methods != ''">
+                and SHIPPING_METHODS = #{shipping_methods,jdbcType=INTEGER}
+            </if>
+            <if test="seller_id != null and seller_id != ''">
+                and SELLER_ID = #{seller_id,jdbcType=INTEGER}
+            </if>
+            <if test="car_type != null and car_type != ''">
+                and CAR_TYPE = #{car_type,jdbcType=INTEGER}
+            </if>
+            <if test="chauffeur_id != null and chauffeur_id != ''">
+                and CHAUFFEUR_ID = #{chauffeur_id,jdbcType=BIGINT}
+            </if>
+            <if test="order_time_begin != null and order_time_begin != ''">
+                <![CDATA[ and DATE_FORMAT(ORDER_TIME, '%Y-%m-%d') >= #{order_time_begin, jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="order_time_end != null and order_time_end != ''">
+                <![CDATA[ and DATE_FORMAT(ORDER_TIME, '%Y-%m-%d') <= concat( #{order_time_end, jdbcType=VARCHAR}, ' 23:59:59') ]]>
+            </if>
+            <if test="create_time_begin != null and create_time_begin != ''">
+                <![CDATA[ and DATE_FORMAT(CREATE_TIME, '%Y-%m-%d') >= #{create_time_begin, jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="create_time_end != null and create_time_end != ''">
+                <![CDATA[ and DATE_FORMAT(CREATE_TIME, '%Y-%m-%d') <= concat( #{create_time_end, jdbcType=VARCHAR}, ' 23:59:59') ]]>
+            </if>
+            and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+        </where>
+        order by CREATE_TIME desc
+    </select>
 
 
 

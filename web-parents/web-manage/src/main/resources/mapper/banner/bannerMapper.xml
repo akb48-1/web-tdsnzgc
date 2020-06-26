@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 命名空间为绑定接口的全类名 -->
+<mapper namespace="com.tdsnzgc.manage_web.pojo.banner.mapper.BannerMapper">
+    <resultMap id="resultBannerMap" type="com.tdsnzgc.manage_web.pojo.banner.Banner">
+        <id property="banner_id" column="BANNER_ID" jdbcType="BIGINT"/>
+        <result property="banner_url" column="BANNER_URL" jdbcType="VARCHAR"/>
+        <result property="type" column="TYPE" jdbcType="INTEGER"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="sort" column="SORT" jdbcType="BIGINT"/>
+        <result property="organ_id" column="ORGAN_ID" jdbcType="BIGINT"/>
+        <result property="href" column="HREF" jdbcType="VARCHAR"/>
+        <result property="banner_desc" column="BANNER_DESC" jdbcType="VARCHAR"/>
+        <result property="create_time" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryById" resultMap="resultBannerMap">
+        select * from t_banners
+        where BANNER_ID = #{id,jdbcType=BIGINT} and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByPage" resultMap="resultBannerMap" parameterType="Map">
+        select BANNER_ID,BANNER_URL,TYPE,STATUS,SORT,ORGAN_ID,HREF,BANNER_DESC,CREATE_TIME,CREATEER_NAME,UPDATE_TIME,UPDATEER_NAME
+        from t_banners
+        <where>
+            <if test="banner_id != null and banner_id != ''">
+                and BANNER_ID like concat('%',#{banner_id,jdbcType=BIGINT},'%')
+            </if>
+            <if test="type != null and type != ''">
+                and TYPE = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="status != null and status != ''">
+                and STATUS = #{status,jdbcType=INTEGER}
+            </if>
+            and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+        </where>
+        order by SORT asc
+    </select>
+
+
+    <insert id="insert" parameterType="com.tdsnzgc.manage_web.pojo.banner.Banner">
+
+        insert into t_banners (BANNER_URL,TYPE,SORT,ORGAN_ID,HREF,BANNER_DESC,STATUS,CREATE_TIME,CREATEER_NAME) values
+        (
+            #{banner_url,jdbcType=VARCHAR},
+            #{type,jdbcType=INTEGER},
+            #{sort,jdbcType=BIGINT},
+            #{organ_id,jdbcType=BIGINT},
+            #{href,jdbcType=VARCHAR},
+            #{banner_desc,jdbcType=VARCHAR},
+            0, now(), #{createer_name,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tdsnzgc.manage_web.pojo.banner.Banner">
+        update t_banners
+        <set>
+            UPDATEER_NAME = #{updateer_name,jdbcType=VARCHAR},
+            UPDATE_TIME = now()
+            <if test="banner_url != null ">
+                ,BANNER_URL = #{banner_url,jdbcType=VARCHAR}
+            </if >
+            <if test="type != null ">
+                ,TYPE = #{type,jdbcType=INTEGER}
+            </if >
+            <if test="sort != null ">
+                ,SORT = #{sort,jdbcType=BIGINT}
+            </if >
+            <if test="href != null ">
+                ,HREF = #{href,jdbcType=BIGINT}
+            </if >
+            <if test="banner_desc != null ">
+                ,BANNER_DESC = #{banner_desc,jdbcType=VARCHAR}
+            </if >
+            <if test="status != null ">
+                ,STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </set>
+        where BANNER_ID = #{banner_id} and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delete" >
+        delete from t_banners where BANNER_ID = #{id, jdbcType=BIGINT} and ORGAN_ID = #{organ_id, jdbcType=BIGINT}
+    </delete>
+
+    <select id="queryAll" resultMap="resultBannerMap" parameterType="Map">
+        select BANNER_ID,BANNER_URL,TYPE,STATUS,SORT,ORGAN_ID,HREF,BANNER_DESC,CREATE_TIME,CREATEER_NAME,UPDATE_TIME,UPDATEER_NAME
+        from t_banners
+        <where>
+            <if test="type != null and type != ''">
+                and TYPE = #{type,jdbcType=INTEGER}
+            </if>
+            and STATUS = 0
+            and ORGAN_ID = #{organ_id,jdbcType=BIGINT}
+        </where>
+        order by SORT asc
+    </select>
+
+
+</mapper>

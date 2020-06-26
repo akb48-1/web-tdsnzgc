@@ -1,14 +1,17 @@
 package com.tdsnzgc.manage_web.pojo.goods;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tdsnzgc.manage_web.pojo.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -49,4 +52,8 @@ public class GoodsRecord extends BaseEntity {
     @ApiModelProperty("交易数量")
     private Integer amount;
 
+    @ApiModelProperty("订单交易时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date order_time;
 }

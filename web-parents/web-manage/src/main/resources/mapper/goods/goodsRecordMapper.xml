@@ -20,29 +20,33 @@
         <result property="createer_name" column="CREATEER_NAME" jdbcType="VARCHAR"/>
         <result property="update_time" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
         <result property="updateer_name" column="UPDATEER_NAME" jdbcType="VARCHAR"/>
+        <result property="order_time" column="ORDER_TIME" jdbcType="TIMESTAMP"/>
     </resultMap>
 
 
     <!-- 商品购买记录   -->
     <insert id="genBuyRecord" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="GOODS_UNIQUE_ID" keyProperty="goods_unique_id">
-        insert into t_goods_record values
+        insert into t_goods_record
+        (GOODS_ID, GOODS_NAME, GOODS_PRICE, GOODS_TOTAL_PRICE, GOODS_DESC, TYPE, AMOUNT, ORGAN_ID, UNIT_ID, UNIT_NAME, CREATE_TIME, CREATEER_NAME, UPDATE_TIME, UPDATEER_NAME, ORDER_TIME)
+        values
         <foreach collection="list" item="item"  separator="," close=";">
             (
-            #{item.goods_unique_id,jdbcType=BIGINT},
             #{item.goods_id,jdbcType=BIGINT},
             #{item.goods_name,jdbcType=VARCHAR},
-            #{item.goods_desc,jdbcType=VARCHAR},
             #{item.goods_price,jdbcType=DECIMAL},
             #{item.goods_total_price,jdbcType=DECIMAL},
-            #{item.create_time,jdbcType=TIMESTAMP},
+            #{item.goods_desc,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            #{item.amount,jdbcType=INTEGER},
+            #{item.organ_id,jdbcType=BIGINT},
+            #{item.unit_id,jdbcType=BIGINT},
+            #{item.unit_name,jdbcType=VARCHAR},
+            now(),
             #{item.createer_name,jdbcType=VARCHAR},
             null,
             null,
-            #{item.type,jdbcType=INTEGER},
-            #{item.amount,jdbcType=INTEGER},
-            #{item.unit_name,jdbcType=VARCHAR},
-            #{item.unit_id,jdbcType=BIGINT},
-            #{item.organ_id,jdbcType=BIGINT})
+            #{item.order_time,jdbcType=TIMESTAMP}
+            )
         </foreach>
     </insert>
 

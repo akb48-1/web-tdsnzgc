@@ -1,5 +1,6 @@
 package com.tdsnzgc.manage_web.pojo.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tdsnzgc.manage_web.pojo.base.BaseEntity;
 import com.tdsnzgc.manage_web.pojo.goods.GoodsRecord;
 import io.swagger.annotations.ApiModel;
@@ -7,9 +8,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -62,7 +65,7 @@ public class Order extends BaseEntity {
     @ApiModelProperty(value = "司机名称")
     private String chauffeur_name;
 
-    @ApiModelProperty(value = "车型")
+    @ApiModelProperty(value = "车型ID")
     private BigInteger car_type;
 
     @ApiModelProperty(value = "车型名称")
@@ -73,4 +76,10 @@ public class Order extends BaseEntity {
 
     @ApiModelProperty(value = "商品交易记录")
     private List<GoodsRecord> GoodsRecords;
+
+    @ApiModelProperty("订单交易时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date order_time;
+
 }

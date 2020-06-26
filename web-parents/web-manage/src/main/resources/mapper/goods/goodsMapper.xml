@@ -51,7 +51,7 @@
             <if test="status != null and status != ''">
                 and STATUS = #{status,jdbcType=INTEGER}
             </if>
-            and (ORGAN_ID = #{organ_id,jdbcType=BIGINT} or ORGAN_ID is null)
+            and (ORGAN_ID = #{organ_id,jdbcType=BIGINT})
         </where>
         order by sortTime desc
     </select>

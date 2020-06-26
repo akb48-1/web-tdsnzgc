@@ -9,8 +9,6 @@ import com.tdsnzgc.common_web.controller.CommonController;
 import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -59,7 +57,6 @@ public class Hello {
     @ApiOperation("通过token得到用户信息")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     public Result checkRedis(@RequestHeader(name = "token") String token) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Account account = accountService.getUserInfo(token);
         return new ResultUtil().setData(account);
     }

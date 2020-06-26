@@ -43,9 +43,6 @@ public class RoleController {
     }
 
     @ApiOperation("新增角色")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "role_name",value = "角色名", required = true)
-    })
     @PostMapping("/addRole")
     public Result addRole(@RequestBody Role role) {
 
@@ -74,7 +71,7 @@ public class RoleController {
 
     @ApiOperation("删除角色")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "id",value = "角色id")
+        @ApiImplicitParam(name = "id",value = "角色id" )
     })
     @PostMapping("/deleteRole/{id}")
     public Result deleteRole(@PathVariable(name ="id") BigInteger role_id) {
