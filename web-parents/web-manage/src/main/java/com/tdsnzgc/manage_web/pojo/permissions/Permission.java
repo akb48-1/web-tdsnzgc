@@ -22,4 +22,5 @@ public class Permission extends BaseEntity {
     String handle_value;
     BigInteger parent_menu_id;
     String icon;
+    Integer show_menu;
 }

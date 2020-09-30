@@ -23,4 +23,5 @@ public class Menu extends BaseEntity {
     String icon;
     List<Menu> children;
     List<Object> handle_list;
+    Boolean show_menu;
 }

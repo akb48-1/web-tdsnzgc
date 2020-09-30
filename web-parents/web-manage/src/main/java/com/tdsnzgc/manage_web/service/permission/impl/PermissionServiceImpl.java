@@ -66,6 +66,7 @@ public class PermissionServiceImpl implements PermissionService {
                 menu.setParent_id(p.getParent_menu_id());
                 menu.setType(p.getPermission_type());
                 menu.setIcon(p.getIcon());
+                menu.setShow_menu(p.getShow_menu() == 0? true : false);
 
                 if(1 == p.getPermission_level()) {
                     level1MenuList.add(menu);
